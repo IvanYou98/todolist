@@ -5,6 +5,7 @@ import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
+import Create from "./pages/create/Create";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RequireAuth><ReviewList/></RequireAuth>}/>
                     <Route path="/login" element={<Login/>}/>
+                    <Route path='/create' element={<Create/>}/>
                     <Route path="/register" element={<Register/>}/>
                 </Routes>
             </BrowserRouter>
