@@ -6,6 +6,7 @@ import Register from "./pages/register/Register";
 import {useContext} from "react";
 import {AuthContext} from "./context/AuthContext";
 import Create from "./pages/create/Create";
+import Edit from "./pages/edit/Edit";
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
                     <Route path="/login" element={<Login/>}/>
                     <Route path='/create' element={<Create/>}/>
                     <Route path="/register" element={<Register/>}/>
+                    <Route path="/edit" element={<Edit/>}/>
                 </Routes>
             </BrowserRouter>
         </div>
