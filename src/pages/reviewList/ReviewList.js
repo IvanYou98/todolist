@@ -3,10 +3,11 @@ import {useContext, useEffect, useState} from 'react';
 import {DataGrid} from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Selector from "../../components/Selector";
-import {collection, getDocs} from "firebase/firestore";
+import {collection, getDocs, query, where} from "firebase/firestore";
 import {db} from "../../firebase"
 import {AuthContext} from "../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
+import {DueTypeContext} from "../../context/DueTypeContext";
 
 
 const columns = [
@@ -51,25 +52,66 @@ const columns = [
 const ReviewList = () => {
     const [data, setData] = useState([]);
     const {currentUser} = useContext(AuthContext);
+    const {currentDueType} = useContext(DueTypeContext);
     const navigate = useNavigate();
     const handleCreate = e => {
         navigate('/create');
     }
     useEffect(() => {
+        const period = [2, 4, 7];
         const fetchData = async () => {
+            console.log("currentDueType: ", currentDueType)
             const uid = currentUser.uid;
             const querySnapshot = await getDocs(collection(db, uid));
             let list = [];
+            const today = new Date();
             querySnapshot.forEach((doc) => {
                 let problem = doc.data();
                 problem.id = doc.id;
                 problem.lastCompleteDate = new Date(problem.lastCompleteDate.seconds * 1000);
-                list.push(problem);
+                let dueDate = new Date(problem.lastCompleteDate);
+                dueDate.setDate(problem.lastCompleteDate.getDate() + period[problem.currentRound - 1]);
+                console.log(today.getFullYear());
+                console.log(today.getMonth());
+                console.log(today.getDate());
+                if (currentDueType === "all") {
+                    list.push(problem);
+                } else if (currentDueType === "today"
+                    && today.getFullYear() === dueDate.getFullYear()
+                    && today.getMonth() === dueDate.getMonth()
+                    && today.getDate() === dueDate.getDate()) {
+                    list.push(problem);
+                } else if (currentDueType === "overDue" &&
+                    (problem.currentRound !== 3) &&
+                    (today.getFullYear() > dueDate.getFullYear() ||
+                    today.getMonth() > dueDate.getMonth() ||
+                    today.getDate() > dueDate.getDate())
+                ) {
+                    list.push(problem);
+                }
             })
             setData(list);
         };
         fetchData();
-    }, [])
+    }, [currentDueType, currentUser.uid])
+
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const uid = currentUser.uid;
+    //         const querySnapshot = await getDocs(collection(db, uid));
+    //         let list = [];
+    //         querySnapshot.forEach((doc) => {
+    //             let problem = doc.data();
+    //             problem.id = doc.id;
+    //             problem.lastCompleteDate = new Date(problem.lastCompleteDate.seconds * 1000);
+    //             list.push(problem);
+    //         })
+    //         setData(list);
+    //     };
+    //     fetchData();
+    // }, [])
+
+
     return (
         <div style={{height: 700, width: '80%', marginTop: '50px'}}>
             <div className="createBtn">
