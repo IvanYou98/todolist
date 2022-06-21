@@ -23,8 +23,9 @@ const columns = [
         field: 'problemLink',
         headerName: 'Link to Problem',
         renderCell: cell =>
-            <a href={cell.row.problemLink}>{cell.row.problemLink}</a>,
-        width: 450,
+            <Button variant="contained" target="_blank" href={cell.row.problemLink}
+                    style={{height: '25px', background: 'green'}}>Practice</Button>,
+        width: 250,
         type: 'string',
     },
     {
@@ -43,13 +44,6 @@ const columns = [
         headerName: 'Edit',
         renderCell: cell =>
             <Button variant="contained" href={"/edit?problemId=" + cell.row.id} style={{height: '25px'}}>Edit</Button>
-
-    },
-    {
-        field: 'dummy',
-        headerName: 'Edit',
-        renderCell: cell =>
-            <div>{console.log(cell.row)}</div>
 
     }
 ];

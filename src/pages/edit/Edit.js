@@ -36,7 +36,7 @@ const Edit = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const problemId = searchParams.get("problemId");
     const convertDateFormat = (date) => {
-        const day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+        const day = date.getDate()  < 10 ? "0" + (date.getDate()) : date.getDate();
         const month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
         const year = date.getFullYear();
         return year + "-" + month + "-" + day;
@@ -48,7 +48,6 @@ const Edit = () => {
             let problem = docSnap.data();
             // problem.lastCompleteDate = convertDateFormat(new Date(problem.lastCompleteDate.seconds * 1000));
             problem.lastCompleteDate = convertDateFormat(new Date(problem.lastCompleteDate.seconds * 1000));
-            console.log(problem);
             setData(problem);
         }
         fetchData();
@@ -57,13 +56,17 @@ const Edit = () => {
     const handleChange = (e) => {
         e.preventDefault();
         data[e.target.id] = e.target.value;
+
+        data.lastCompleteDate = new Date(data.lastCompleteDate.replaceAll('-', '/'));
         setData(data);
         console.log(data)
     }
 
     const handleSubmit = async e => {
         e.preventDefault();
-        console.log(data);
+        data.lastCompleteDate = new Date(data.lastCompleteDate);
+        await setDoc(doc(db, uid, problemId), data);
+        navigate("/");
     }
 
     return (
