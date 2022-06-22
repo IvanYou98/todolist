@@ -1,5 +1,5 @@
 import "./create.scss";
-import {collection, doc, addDoc} from "firebase/firestore";
+import {collection, addDoc} from "firebase/firestore";
 import {db} from "../../firebase"
 import {useContext} from "react";
 import {AuthContext} from "../../context/AuthContext";
