@@ -22,7 +22,7 @@ const Create = () => {
             id: "problemLink",
             label: "Problem Link",
             type: "text",
-            placeholder: "https://www.leetcode.com/twoSum",
+            placeholder: "https://www.leetcode.com/twosum",
         }
     ];
 
